@@ -1,0 +1,17 @@
+"Input para añadir los datos del usuario en el registro"
+input UserInput {
+  "Identificador en este caso no obligatorio"
+  id: ID
+  "Nombre de pila"
+  name: String!
+  "Apellido/s"
+  lastName: String!
+  "Correo electrónico"
+  email: String!
+  "Contraseña asociada a la cuenta"
+  password: String!
+  "Fecha de nacimiento - Solo 18+"
+  birthday: String!
+  "Permisos del usuario"
+  role: Role = CLIENT
+}

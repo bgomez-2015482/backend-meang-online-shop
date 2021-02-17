@@ -1,12 +1,13 @@
 import { IResolvers } from 'graphql-tools';
-import { COLLECTIONS } from '../config/constants';
+import { COLLECTIONS } from '../../config/constants';
 import bcrypt from 'bcrypt';
+import { asignDocumentId, findOneElement, insertOneElement } from '../../lib/db-operations';
 
-const resolversMutation: IResolvers = {
+const userMutation: IResolvers = {
     Mutation: {
         async register(_, { user }, { db }) {
             //COMPROBAR QUE EL USUARIO NO EXISTA
-            const userCheck = await db.collection(COLLECTIONS.USERS).findOne({ email: user.email });
+            const userCheck = await findOneElement(db, COLLECTIONS.USERS, { email: user.email });
             if (userCheck !== null) {
                 return {
                     status: false,
@@ -15,21 +16,13 @@ const resolversMutation: IResolvers = {
                 };
             }
             // COMPROBAR EL ÚLTIMO USUARIO REGISTRADO PARA ASIGNAR ID
-            const lastUser = await db.collection(COLLECTIONS.USERS).
-                find().
-                limit(1).
-                sort({ registerDate: -1 }).toArray();
-            if (lastUser.length === 0) {
-                user.id = 1;
-            } else {
-                user.id = lastUser[0].id + 1;
-            }
+            user.id = await asignDocumentId(db, COLLECTIONS.USERS, { registerDate: -1 });
             //ASIGNAR LA FECHA EN FORMATO ISO EN LA PROPIEDAD REGISTER DATE
             user.registerDate = new Date().toISOString();
             //ENCRIPTAR CONTRASEÑA
             user.password = bcrypt.hashSync(user.password, 10);
             //GUARDAR EL DOCUMENTO REGISTRO EN LA COLECCIÓN
-            return await db.collection(COLLECTIONS.USERS).insertOne(user).then(
+            return await insertOneElement(db, COLLECTIONS.USERS, user).then(
                 async () => {
                     return {
                         status: true,
@@ -49,4 +42,4 @@ const resolversMutation: IResolvers = {
     }
 };
 
-export default resolversMutation;
+export default userMutation;

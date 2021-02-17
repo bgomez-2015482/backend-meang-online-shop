@@ -1,0 +1,23 @@
+"""
+Especificar información detallada del usuario
+email=usuario
+fechaNacimiento y de registro = formato ISO
+"""
+type User {
+  "Identificador único"
+  id: ID!
+  "Nombre de pila"
+  name: String!
+  "Apellido/s"
+  lastName: String!
+  "Correo electrónico"
+  email: String!
+  "Contraseña asociada a la cuenta"
+  password: String!
+  "Fecha de registro en la base de datos"
+  registerDate: String!
+  "Fecha de nacimiento - Solo 18+"
+  birthday: String!
+  "Permisos del usuario"
+  role: Role!
+}
