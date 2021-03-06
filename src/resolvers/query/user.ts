@@ -46,7 +46,8 @@ const resolversUserQuery: IResolvers = {
                         : 'Usuario logueado correctamente',
                     token: !passwordCheck
                         ? null
-                        : new JWT().sign({ user }, EXPIRETIME.H24)
+                        : new JWT().sign({ user }, /*EXPIRETIME.H24*/60),
+                        user
                 };
             } catch (error) {
                 console.log(error);
