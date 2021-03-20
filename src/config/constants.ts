@@ -7,7 +7,8 @@ if (process.env.NODE_DEV != 'production') {
 export const SECRET_KEY = process.env.SECRET || '3BD5665729B*110480b0';
 
 export enum COLLECTIONS {
-    USERS='users'
+    USERS='users',
+    GENRES = 'genres'
 }
 
 export enum MESSAGES {
