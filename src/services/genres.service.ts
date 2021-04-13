@@ -42,7 +42,7 @@ class GenresService extends ResolversOperationsService {
         }
         //si valida las opciones anteriores, venir aqui y crear el documento
         const genreObject = {
-            id: await asignDocumentId(this.getDb(), this.collection, { id: -1 }),
+            id: await asignDocumentId(this.getDb(), this.collection, { _id: -1 }),
             name: genre,
             slug: slugify(genre || '', { lower: true })
         };
@@ -94,7 +94,24 @@ class GenresService extends ResolversOperationsService {
             };
         }
         const result = await this.del(this.collection, { id }, 'genero');
-        return { status: result.status, message: result.message};
+        return { status: result.status, message: result.message };
+    }
+
+    async block() {
+        const id = this.getVariables().id;
+
+        if (!this.checkData(String(id) || '')) {
+            return {
+                status: false,
+                message: 'El ID del género no se ha especificado correctamente',
+                genre: null
+            };
+        }
+        const result = await this.update(this.collection, { id }, { active: false }, 'género');
+        return {
+            status: result.status,
+            message: (result.status) ? 'Bloqueado correctamente' : 'Error al bloquear'
+        };
     }
 
     private async checkInDatabase(value: string) {

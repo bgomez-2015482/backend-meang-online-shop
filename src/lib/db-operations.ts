@@ -21,10 +21,16 @@ export const asignDocumentId = async (
         .limit(1)
         .sort(sort)
         .toArray();
-    if (lastElement.length === 0) {
-        return '1';
+    let exit = false;
+    let index = 1;
+
+    // Comprobamos que no existe el ID que vamos a asignar
+    while (!exit) {
+        const lastIndexPlus = lastElement.length === 0 ? '1' : String(+lastElement[0].id + index);
+        const findItem = await findOneElement(database, collection, { id: String(+lastIndexPlus) });
+        findItem ? index++ : exit = true;
     }
-    return String(+lastElement[0].id + 1);
+    return lastElement.length === 0 ? '1' : String(+lastElement[0].id + index);
 };
 
 export const findOneElement = async (
@@ -92,8 +98,9 @@ export const findElements = async (
 
 export const countElements = async (
     database: Db,
-    collection: string
+    collection: string,
+    filter: object = {}
 ) => {
-    return await database.collection(collection).countDocuments();
+    return await database.collection(collection).countDocuments(filter);
 };
 

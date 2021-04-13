@@ -20,4 +20,6 @@ type User {
   birthday: String!
   "Permisos del usuario"
   role: Role!
+  "Activo o no activo"
+  active: Boolean
 }

@@ -1,4 +1,4 @@
-import { COLLECTIONS, MESSAGES } from '../config/constants';
+import { COLLECTIONS, EXPIRETIME, MESSAGES } from '../config/constants';
 import bcrypt from 'bcrypt';
 import { IContextData } from '../interfaces/context.data.intreface';
 import { asignDocumentId, findOneElement } from '../lib/db-operations';
@@ -67,7 +67,7 @@ class UsersService extends ResolversOperationsService {
                     : 'Usuario logueado correctamente',
                 token: !passwordCheck
                     ? null
-                    : new JWT().sign({ user }, /*EXPIRETIME.H24*/60),
+                    : new JWT().sign({ user }, EXPIRETIME.H24),
                 user: !passwordCheck
                     ? null
                     : user,
@@ -162,6 +162,28 @@ class UsersService extends ResolversOperationsService {
             status: result.status,
             message: result.message
         };
+    }
+
+    //BLOQUEAR USUARIO
+    async block() {
+        const id = this.getVariables().id;
+
+        if (!this.checkData(String(id) || '')) {
+            return {
+                status: false,
+                message: 'El ID del usuario no se ha especificado correctamente',
+                genre: null
+            };
+        }
+        const result = await this.update(this.collection, { id }, { active: false }, 'usuario');
+        return {
+            status: result.status,
+            message: (result.status) ? 'Bloqueado correctamente' : 'Error al bloquear'
+        };
+    }
+
+    private checkData(value: string) {
+        return (value === '' || value === undefined) ? false : true;
     }
 }
 
