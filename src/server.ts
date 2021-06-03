@@ -8,6 +8,7 @@ import schema from './schema';
 import expressPlayground from 'graphql-playground-middleware-express';
 import Database from './lib/database';
 import { IContext } from './interfaces/context.interface';
+import chalk from 'chalk';
 
 //CONFIGURACIÓN DE LAS VARIABLES DE ENTORNO (LECTURA)
 
@@ -33,7 +34,7 @@ async function init() {
         const token = (req)
             ? req.headers.authorization
             : connection.authorization;
-            return { db, token };
+        return { db, token };
     };
 
     const server = new ApolloServer({
@@ -55,7 +56,12 @@ async function init() {
         {
             port: PORT
         },
-        () => console.log(`http://localhost:${PORT} API MEANG - ONLINE SHOP START`)
+        () => {
+            console.log('=============== SERVER API GRAPHQL ===============');
+            console.log(`STATUS: ${chalk.greenBright('ONLINE')}`);
+            console.log(`MESSAGE: ${chalk.greenBright('API MEANG - ONLINE SHOP START')}`);
+            console.log(`URL: ${chalk.greenBright(`http://localhost:${PORT}`)}`);
+        }
     );
 }
 

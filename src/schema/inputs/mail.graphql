@@ -1,0 +1,9 @@
+input MailInput {
+    from: String
+    "RECEPTOR"
+    to: String!
+    "ASUNTO"
+    subject: String!
+    "CONTENIDO DEL EMAIL CON HTML"
+    html: String!
+}

@@ -13,6 +13,7 @@ class Database {
         );
         const db = client.db();
         if(client.isConnected()){
+            console.log('=============== DATABASE ===============');
             console.log(`STATUS:  ${chalk.greenBright('Base de datos corriendo')}`);
             console.log(`DATABASE:  ${chalk.greenBright(db.databaseName)}`);
         }
